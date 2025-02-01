@@ -6,6 +6,8 @@
 
 koishi地址：[GitHub - koishijs/koishi: Cross-platform chatbot framework made with love](https://github.com/koishijs/koishi)
 
+Napcat地址：[GitHub - NapNeko/NapCatQQ: 现代化的基于 NTQQ 的 Bot 协议端实现](https://github.com/NapNeko/NapCatQQ)
+
 win使用教程：
 
 1.右键存放在一键安装chatluna.ps1的文件
