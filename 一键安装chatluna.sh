@@ -61,3 +61,7 @@ echo "正在启动 Koishi"
 npm run start 
 
 echo "Node.js、npm 镜像配置、Koishi 初始化以及插件安装完成。Koishi 安装在 $desktop_path/koishi-app"
+
+#安装napcat
+cd "$desktop_path"
+curl -o napcat.sh https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.sh && sudo bash napcat.sh --tui

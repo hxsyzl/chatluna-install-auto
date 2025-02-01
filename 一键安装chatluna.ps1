@@ -47,3 +47,29 @@ Write-Output "正在启动 Koishi"
 Start-Process -FilePath "$koishiAppPath\koishi.bat"
 
 Write-Output "Node.js、npm 镜像配置、Koishi 初始化以及插件安装完成,Koishi 安装在 $desktop_path/koishi-app"
+
+# 提示用户选择操作系统版本
+Write-Output "请选择您的操作系统版本："
+Write-Output "1. Win10"
+Write-Output "2. Win11"
+$choice = Read-Host "输入选项 (1 或 2) 然后按回车键"
+
+switch ($choice) {
+    1 {
+        Write-Output "您选择了 Win10。正在执行相关操作..."
+        more +3 "%~f0" >>generate.ps1 && powershell -ExecutionPolicy ByPass -File ./generate.ps1 -verb runas && del ./generate.ps1 && powershell -ExecutionPolicy ByPass -File ./install.ps1 -verb runas
+        goto :eof
+    }
+    2 {
+        Write-Output "您选择了 Win11。正在执行相关操作..."
+        $url = "https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.ps1"
+        $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+        [IO.File]::WriteAllBytes("./install.ps1", $response.Content)
+        curl -o install.ps1 https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.ps1
+        powershell -ExecutionPolicy ByPass -File ./install.ps1 -verb runas
+    }
+    default {
+        Write-Output "无效的选项，请重新运行脚本并选择 1 或 2。"
+        exit
+    }
+}
