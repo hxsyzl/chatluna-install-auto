@@ -1,0 +1,22 @@
+name: linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-copy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: test
+
+      - name: run sh
+        run: |
+         cd test
+         chmod 777 *
+         ./一键安装chatluna.sh
