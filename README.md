@@ -22,8 +22,8 @@ linux使用教程
 
 2.进入存放一键安装chatluna.sh的文件夹内
 
-3.输入*chomd 777 一键安装chatluna.sh*
+3.输入**chomd 777 一键安装chatluna.sh**
 
-4.输入*./一键安装chatluna.sh*
+4.输入 **./一键安装chatluna.sh**
 
 5.享受
