@@ -9,35 +9,41 @@ $NODE_VERSION = "v21.7.3"
 $NODE_MSI = "node-$NODE_VERSION-x64.msi"
 $DOWNLOAD_URL = "https://nodejs.org/dist/$NODE_VERSION/$NODE_MSI"
 
-Write-Host "正在下载 Node.js $NODE_VERSION ..."
-Write-Host "下载地址：$DOWNLOAD_URL"
+# 检查Node.js是否已安装
+$nodeExePath = "$env:ProgramFiles\nodejs\node.exe"
+if (Test-Path $nodeExePath) {
+    Write-Host "Node.js $NODE_VERSION 已安装，跳过下载和安装步骤。"
+} else {
+    Write-Host "正在下载 Node.js $NODE_VERSION ..."
+    Write-Host "下载地址：$DOWNLOAD_URL"
 
-# 使用PowerShell进行下载
-Invoke-WebRequest -Uri $DOWNLOAD_URL -OutFile $NODE_MSI
+    # 使用PowerShell进行下载
+    Invoke-WebRequest -Uri $DOWNLOAD_URL -OutFile $NODE_MSI
 
-if (-Not (Test-Path $NODE_MSI)) {
-    Write-Host "下载失败，请检查网络连接"
-    pause
-    exit
-}
+    if (-Not (Test-Path $NODE_MSI)) {
+        Write-Host "下载失败，请检查网络连接"
+        pause
+        exit
+    }
 
-Write-Host "正在安装Node.js..."
+    Write-Host "正在安装Node.js..."
 
-# 执行静默安装并添加PATH环境变量
-Start-Process msiexec -ArgumentList "/i `"$NODE_MSI`" /qn ADDLOCAL=NodeRuntime,npm,NpmAndNodePathFeature" -Wait
+    # 执行静默安装并添加PATH环境变量
+    Start-Process msiexec -ArgumentList "/i `"$NODE_MSI`" /qn ADDLOCAL=NodeRuntime,npm,NpmAndNodePathFeature" -Wait
 
-# 等待安装完成并验证
-Start-Sleep -Seconds 15
-if (-Not (Test-Path "$env:ProgramFiles\nodejs\node.exe")) {
-    Write-Host "安装失败，node.exe未找到,请手动安装"
+    # 等待安装完成并验证
+    Start-Sleep -Seconds 15
+    if (-Not (Test-Path "$env:ProgramFiles\nodejs\node.exe")) {
+        Write-Host "安装失败，node.exe未找到,请手动安装"
+        Remove-Item $NODE_MSI -ErrorAction SilentlyContinue
+        exit 1
+    }
+
+    # 清理安装包
     Remove-Item $NODE_MSI -ErrorAction SilentlyContinue
-    exit 1
+
+    Write-Host "安装完成！正在验证安装..."
 }
-
-# 清理安装包
-Remove-Item $NODE_MSI -ErrorAction SilentlyContinue
-
-Write-Host "安装完成！正在验证安装..."
 
 # 强制刷新环境变量
 [Environment]::SetEnvironmentVariable("PATH", [Environment]::GetEnvironmentVariable("PATH", "Machine"), "Process")
