@@ -1,0 +1,56 @@
+# ============================================
+# Docker 构建忽略文件
+# ============================================
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志
+*.log
+logs/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+
+# 文档
+README.md
+LICENSE
+*.md
+
+# 脚本
+一键安装chatluna.ps1
+一键安装chatluna.sh
+*.sh
+*.ps1
+
+# 数据目录
+data/
+napcat/
+
+# 其他
+.env
+.env.local
+.env.*.local

@@ -1,0 +1,59 @@
+# ============================================
+# ChatLuna Docker Compose 配置
+# ============================================
+
+version: '3.8'
+
+services:
+  koishi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chatluna-koishi
+    ports:
+      - "5140:5140"
+    volumes:
+      # 持久化配置和数据
+      - ./data:/koishi/data
+      # 挂载配置文件（可选）
+      - ./koishi.yml:/koishi/koishi-app/koishi.yml:ro
+    environment:
+      - NODE_ENV=production
+      - KOISHI_PORT=5140
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - chatluna-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5140"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # NapCat 服务（可选，用于 QQ 机器人）
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: chatluna-napcat
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "6099:6099"
+    volumes:
+      - ./napcat/config:/app/config
+      - ./napcat/data:/app/data
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - chatluna-network
+    profiles:
+      - napcat  # 使用 --profile napcat 启动此服务
+
+networks:
+  chatluna-network:
+    driver: bridge
+
+volumes:
+  koishi-data:
+    driver: local
